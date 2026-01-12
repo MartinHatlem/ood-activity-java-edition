@@ -18,14 +18,6 @@ public class LibraryManager {
                 && Objects.equals(b.getAuthor(), book.getAuthor()));
     }
 
-    public void updateBook(String originalTitle, Book updatedBook) {
-        Book b = findBook(originalTitle);
-        if (b != null) {
-            b.setTitle(updatedBook.getTitle());
-            b.setAuthor(updatedBook.getAuthor());
-        }
-    }
-
     public Book findBook(String title) {
         for (Book b : books) {
             if (Objects.equals(b.getTitle(), title)) return b;
@@ -39,14 +31,6 @@ public class LibraryManager {
     public void removeMember(Member member) {
         members.removeIf(m -> Objects.equals(m.getMemberId(), member.getMemberId()));
         borrowedBooks.remove(member);
-    }
-
-    public void updateMember(String memberId, Member updatedMember) {
-        Member m = findMember(memberId);
-        if (m != null) {
-            m.setName(updatedMember.getName());
-            m.setMemberId(updatedMember.getMemberId());
-        }
     }
 
     public Member findMember(String memberId) {

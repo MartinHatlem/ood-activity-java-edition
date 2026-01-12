@@ -8,14 +8,27 @@ public class LibraryManager {
 
     public final List<Book> books = new ArrayList<>();
     public final List<Member> members = new ArrayList<>();
-    public final Map<Member, List<Book>> borrowedBooks = new HashMap<>();
-
 
     public void addBook(Book book) { books.add(book); }
 
     public void removeBook(Book book) {
+        if (isBookBorrowed(book)) {
+            throw new IllegalStateException("Cannot remove the book " + book.getTitle() + " since it is currently borrowed by a member.");
+        }
         books.removeIf(b -> Objects.equals(b.getTitle(), book.getTitle())
                 && Objects.equals(b.getAuthor(), book.getAuthor()));
+    }
+
+    private boolean isBookBorrowed(Book book) {
+        for (Member member : members) {
+            for (Book borrowedBook : member.getBorrowedBooks()) {
+                if (Objects.equals(borrowedBook.getTitle(), book.getTitle()) &&
+                    Objects.equals(borrowedBook.getAuthor(), book.getAuthor())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public Book findBook(String title) {
@@ -25,12 +38,10 @@ public class LibraryManager {
         return null;
     }
 
-
     public void registerMember(Member member) { members.add(member); }
 
     public void removeMember(Member member) {
         members.removeIf(m -> Objects.equals(m.getMemberId(), member.getMemberId()));
-        borrowedBooks.remove(member);
     }
 
     public Member findMember(String memberId) {
@@ -38,21 +49,5 @@ public class LibraryManager {
             if (Objects.equals(m.getMemberId(), memberId)) return m;
         }
         return null;
-    }
-
-    public void borrowBook(Member member, Book book) {
-        borrowedBooks.computeIfAbsent(member, k -> new ArrayList<>()).add(book);
-    }
-
-    public void returnBook(Member member, Book book) {
-        List<Book> list = borrowedBooks.get(member);
-        if (list != null) {
-            list.removeIf(b -> Objects.equals(b.getTitle(), book.getTitle())
-                    && Objects.equals(b.getAuthor(), book.getAuthor()));
-        }
-    }
-
-    public List<Book> viewBorrowedBooks(Member member) {
-        return borrowedBooks.getOrDefault(member, new ArrayList<>());
     }
 }

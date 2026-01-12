@@ -22,4 +22,12 @@ public class Book {
         this.title = updatedBook.getTitle();
         this.author = updatedBook.getAuthor();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Book book = (Book) obj;
+        return title.equals(book.title) && author.equals(book.author);
+    }
 }

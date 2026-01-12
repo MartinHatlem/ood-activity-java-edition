@@ -25,20 +25,4 @@ public class Member {
         this.name = updatedMember.getName();
         this.memberId = updatedMember.getMemberId();
     }
-
-    public void borrowBook(Book book) {
-        borrowedBooks.add(book);
-    }
-
-    // Returns false if member hasn't borrowed the book
-    public boolean returnBook(Book book) {
-        return borrowedBooks.removeIf(b -> 
-            b.getTitle().equals(book.getTitle()) && 
-            b.getAuthor().equals(book.getAuthor())
-        );
-    }
-
-    public List<Book> getBorrowedBooks() {
-        return new ArrayList<>(borrowedBooks);
-    }
 }
